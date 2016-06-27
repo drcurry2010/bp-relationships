@@ -1,0 +1,75 @@
+<?php
+/**
+ * @package BP User Relationship Plugin
+ * @version 1.0
+ * 
+ */
+
+	//** Checks for/creates "bp_user_relationship" table on install. **//
+	function bp_rel_table_create() {
+		
+		
+		//** Global Variables **//
+
+		global $wpdb;
+		global $bp_relationship_info;
+		global $bp_user_info;
+		global $bp_friend_info
+		global $charset_collate;
+		
+
+		//** Internal Variables **//
+
+		$bp_relationship_info = $wpdb->prefix . 'bp_user_relationships';
+		$bp_user_info = $wpdb->prefix . 'bp_users';
+		$bp_friend_info = $wpdb->prefix . 'bp_friends';
+		$charset_collate = $wpdb->get_charset_collate();
+
+
+		//** Core Function **//
+
+		if ($wpdb->get_var( "SHOW TABLES LIKE '$bp_relationship_info'" ) != bp_user_relationships ) {
+			
+			$sql = "CREATE TABLE $bp_relationship_info (
+
+				rel_id mediumint(9) NOT NULL AUTO_INCREMENT,
+				init_id mediumint(9) NOT NULL,
+				targ_id mediumint(9) NOT NULL,
+				init_role varchar(50) NOT NULL,
+				targ_role varchar(50) NOT NULL,
+				rel_conf tinyint(1) DEFAULT NULL,
+				date_conf 
+				UNIQUE KEY id (rel_id)
+			) $charset_collate;";
+
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			dbDelta( $sql );
+
+		}
+
+	}
+
+
+	//** Checks table for/displays all relationships, where rel_conf = 1. **//
+	function bp_rel_display() {
+		$user_id = get_current_user_id();
+		$friend_id = $wpdb->get_results( "SELECT friend_user_id FROM $bp_friend_info WHERE initiator_user_id = $bp_user_id  AND is_confirmed = 1 OR friend_user_id = $bp_user_id AND is_confirmed = 1", ARRAY_A );
+			if ($user_rel['init_id'] = $bp_user_id) {
+				$init_id = $current_bp_user;
+				$targ_id = $bp_user_friend;
+			} elseif ($user_rel['targ_id'] = $bp_user_id) {
+				$targ_id = $current_bp_user;
+				$init_id = $bp_user_friend;
+			}
+	}
+
+	//** Checks table for/displays (as requests and only to user) any relationships.  **//
+	function bp_rel_request() {}
+
+	//** Adds table row with user/relationship info, when user submits request. **//
+	function bp_rel_addrow() {}
+
+	//** Updates table row (rel_conf) to either 0 or 1, when user confirms. **//
+	function bp_rel_confirm() {}
+
+?>

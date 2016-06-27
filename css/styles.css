@@ -1,0 +1,39 @@
+.add-rel {
+    border-top: #000 1px solid;
+    border-bottom: #000 1px solid;
+    float: left;
+}
+
+.cur-rel {
+    clear: both;
+    float: left;
+    border-bottom: #000 1px solid;
+}
+
+div[class^="addrel-"] {
+    float: left;
+    padding: 1rem;
+}
+
+.dis-rel {
+    float: left;
+    clear: both;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    clear: both;
+}
+
+.currel-row {
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    margin: 0;
+    padding: 0.5rem;
+    float: left;
+    clear: both;
+}
