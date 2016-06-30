@@ -131,10 +131,7 @@ if ($result->num_rows > 0) {
   <?php
 
   $sql3 = "SELECT * FROM dd_bp_user_relationships 
-	   WHERE init_id = 2 AND rel_conf = 1 
-	   UNION ALL 
-	   SELECT * FROM dd_bp_user_relationships 
-	   WHERE targ_id = 2 AND rel_conf = 1";
+	   WHERE init_id = 2 OR targ_id = 2 AND rel_conf = 1";
 
   $result3 = $conn->query($sql3);
 
@@ -144,36 +141,15 @@ if ($result->num_rows > 0) {
 	//$bp_user_id = get_current_user_id()
 	$rel_user_id = 2;
 
-	if ($row3["init_id"] == $rel_user_id) {
-		$bp_user_id = $row3["init_id"];
-		$bp_user_role = $row3["init_role"];
+	if ($rel_user_id == $row3["init_id"]) {
 		$bp_friend_id = $row3["targ_id"];
 		$bp_friend_role = $row3["targ_role"];
-
-	$sql4 = "SELECT * FROM dd_users WHERE ID = '" . $bp_user_id . "'";
-
-	$result4 = $conn->query($sql4);
-
-		if ($result4->num_rows > 0) {
-
-    			while($row4 = $result4->fetch_assoc()) {
-
-				$bp_rel_name = $row4["display_name"];
-				$bp_rel_link = $row4["user_nicename"];
-
-				echo '<div class="currel-row"><p><a href="http://localhost/digidung/members/' . $bp_rel_link . '/" target="_blank">' . $bp_rel_name . '</a> is your ' . $bp_user_role . '.</p></div>';
-	
-   	  		}
-
-	  	}
-
-	} elseif ($row3["targ_id"] == $rel_user_id) {
-		$bp_user_id = $row3["targ_id"];
-		$bp_user_role = $row3["targ_role"];
+	} elseif ($rel_user_id == $row3["targ_id"]) {
 		$bp_friend_id = $row3["init_id"];
 		$bp_friend_role = $row3["init_role"];
+	}
 
-	$sql4 = "SELECT * FROM dd_users WHERE ID = '" . $bp_user_id . "'";
+	$sql4 = "SELECT * FROM dd_users WHERE ID = '" . $bp_friend_id . "'";
 
 	$result4 = $conn->query($sql4);
 
@@ -184,15 +160,13 @@ if ($result->num_rows > 0) {
 				$bp_rel_name = $row4["display_name"];
 				$bp_rel_link = $row4["user_nicename"];
 
-				echo '<div class="currel-row"><p><a href="http://localhost/digidung/members/' . $bp_rel_link . '/" target="_blank">' . $bp_rel_name . '</a> is your ' . $bp_user_role . '.</p></div>';
+				echo '<div class="currel-row"><p><a href="http://localhost/digidung/members/' . $bp_rel_link . '/" target="_blank">' . $bp_rel_name . '</a> is your ' . $bp_friend_role . '.</p></div>';
 	
    	  		}
 
 	  	}
 
-	}
-
-      }
+	} 
 
   }
 

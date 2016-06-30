@@ -23,13 +23,30 @@ try {
 		':friend_role' => "$rel_friend_role"
 	) );
 
-	echo "	<h1>Congratulations!</h1>
+} catch(PDOException $ex) {
+    echo "An error occured.";
+    some_logging_function($ex->getMessage());
+}
+
+try {
+	$rel_info = $db->prepare("
+	SELECT * FROM dd_users WHERE ID = :friend_id");
+
+	$rel_info->execute( array( 
+		':friend_id' => "$rel_friend_id"
+	) );
+
+	$friend = $rel_info->fetch();
+
+	$friend_info = print_r ($friend);
+
+	/*echo "<h1>Congratulations!</h1>
 		<p>You have successfully requested a relationship with "
-		 . $friend_name . " ("
+		 . $friend_info['display_name'] . " ("
 		 . $rel_targ_role . "), as their "
 		 . $rel_init_role . ". 
 		Once they accept your request, your new relationship will 
-		display automatically from this profile tab.</p>";
+		display automatically from this profile tab.</p>";*/
 
 } catch(PDOException $ex) {
     echo "An error occured.";
